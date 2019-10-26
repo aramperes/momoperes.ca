@@ -6,8 +6,8 @@ image:
 podAnnotations: {}
 
 service:
-  type: LoadBalancer
-  port: 9987
+  type: NodePort
+  port: 30987
 
 resources:
   limits:
@@ -17,7 +17,9 @@ resources:
     cpu: 100m
     memory: 256Mi
 
-nodeSelector: {}
+nodeSelector:
+  teamspeak: "1"
+
 tolerations: []
 affinity: {}
 

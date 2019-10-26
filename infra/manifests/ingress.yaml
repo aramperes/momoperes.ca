@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: public-ingress
+spec:
+  tls:
+    - hosts:
+        - momoperes.ca
+      secretName: momoperes.ca-wildcard-tls
+  rules:
+    - host: momoperes.ca
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: website
+              servicePort: 9000

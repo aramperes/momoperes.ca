@@ -1,5 +1,6 @@
 variables:
   WEBSITE_SRC: ${CI_PROJECT_DIR}/website
+  INFRA_SRC: ${CI_PROJECT_DIR}/infra
 
   IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
   WEBSITE_IMAGE: ${IMAGE_PREFIX}/website
@@ -45,3 +46,19 @@ website:deploy:
       - master
     changes:
       - website/**/*
+
+infra:deploy:
+  stage: deploy
+  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy manifests directly
+    - cd ${INFRA_SRC}/
+    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+  only:
+    refs:
+      - master
+    changes:
+      - infra/**/*

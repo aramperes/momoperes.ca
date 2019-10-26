@@ -54,7 +54,11 @@ infra:deploy:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
 
-    # Deploy manifests directly
+    # Deploy nginx ingress
+    - helm init --client-only && helm repo update
+    - helm upgrade nginx-ingress stable/nginx-ingress --install --namespace ${DEPLOY_NAMESPACE} --set controller.publishService.enabled=true
+
+    # Deploy infra manifests directly
     - cd ${INFRA_SRC}/
     - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
   only:

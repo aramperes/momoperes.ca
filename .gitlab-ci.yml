@@ -61,7 +61,7 @@ infra:deploy:
 
     # Deploy infra manifests directly
     - cd ${INFRA_SRC}/
-    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+    - kubectl apply -R -f manifests/
   only:
     refs:
       - master

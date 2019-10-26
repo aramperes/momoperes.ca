@@ -1,6 +1,7 @@
 variables:
   WEBSITE_SRC: ${CI_PROJECT_DIR}/website
   INFRA_SRC: ${CI_PROJECT_DIR}/infra
+  TEAMSPEAK_SRC: ${CI_PROJECT_DIR}/teamspeak
 
   IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
   WEBSITE_IMAGE: ${IMAGE_PREFIX}/website
@@ -66,3 +67,21 @@ infra:deploy:
       - master
     changes:
       - infra/**/*
+
+teamspeak:deploy:
+  stage: deploy
+  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${TEAMSPEAK_SRC}/chart
+    - mkdir -p manifests/
+    - helm template ./teamspeak/ --output-dir manifests/ --name teamspeak -f ./teamspeak/values.yaml
+    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+  only:
+    refs:
+      - master
+    changes:
+      - teamspeak/**/*

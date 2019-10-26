@@ -1,0 +1,30 @@
+image:
+  repository: teamspeak
+  tag: 3.9.1
+  pullPolicy: Always
+
+podAnnotations: {}
+
+service:
+  type: LoadBalancer
+  nodePort: 30987
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  annotations:
+    "helm.sh/resource-policy": keep
+  storageClass: do-block-storage
+  storageSize: 1Gi

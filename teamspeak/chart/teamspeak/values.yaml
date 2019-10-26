@@ -7,7 +7,7 @@ podAnnotations: {}
 
 service:
   type: NodePort
-  port: 30987
+  nodePort: 30987
 
 resources:
   limits:

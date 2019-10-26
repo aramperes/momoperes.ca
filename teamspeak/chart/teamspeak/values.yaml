@@ -6,7 +6,7 @@ image:
 podAnnotations: {}
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 9987
 
 resources:

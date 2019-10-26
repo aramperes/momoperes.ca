@@ -10,11 +10,10 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - nodePort: {{ .Values.service.nodePort }}
-      targetPort: 9987
+    - targetPort: 9987
       protocol: UDP
       name: teamspeak-voice
-      port: 9987
+      port: {{ .Values.service.port }}
   selector:
     app: teamspeak
     release: {{ .Release.Name }}

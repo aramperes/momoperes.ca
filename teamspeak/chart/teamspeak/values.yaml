@@ -6,8 +6,8 @@ image:
 podAnnotations: {}
 
 service:
-  type: LoadBalancer
-  nodePort: 30987
+  type: ClusterIP
+  port: 9987
 
 resources:
   limits:

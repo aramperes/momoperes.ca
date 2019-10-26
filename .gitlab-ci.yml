@@ -1,0 +1,47 @@
+variables:
+  WEBSITE_SRC: ${CI_PROJECT_DIR}/website
+
+  IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
+  WEBSITE_IMAGE: ${IMAGE_PREFIX}/website
+
+  KUBECONFIG_PARENT: /etc/deploy
+  KUBECONFIG: ${KUBECONFIG_PARENT}/config
+  DEPLOY_NAMESPACE: public
+
+stages:
+  - build
+  - release
+  - deploy
+
+### WEBSITE ###
+
+website:release:
+  stage: release
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "Building to ${WEBSITE_IMAGE}:${CI_COMMIT_TAG}"
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context ${WEBSITE_SRC} --dockerfile ${WEBSITE_SRC}/docker/Dockerfile --destination ${WEBSITE_IMAGE}:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} --destination ${WEBSITE_IMAGE}:${CI_COMMIT_REF_SLUG}
+  only:
+    changes:
+      - website/**/*
+
+website:deploy:
+  stage: deploy
+  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${WEBSITE_SRC}/chart
+    - mkdir -p manifests/
+    - helm template ./website/ --output-dir manifests/ --name website --set image.name=${WEBSITE_IMAGE} --set image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -f ./website/values.yaml
+    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+  only:
+    refs:
+      - master
+    changes:
+      - website/**/*

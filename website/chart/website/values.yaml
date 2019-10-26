@@ -1,0 +1,15 @@
+replicaCount: 1
+
+image:
+  name: notset
+  tag: latest
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: ClusterIP
+  port: 9000

@@ -96,7 +96,9 @@ teamspeak:deploy:
 
 defiant:build:
   stage: build
-  image: alpine/git
+  image:
+    name: alpine/git
+    entrypoint: ["/bin/sh"]
   script:
     - cd ${DEFIANT_SRC}/src
     - git clone https://github.com/momothereal/code-jam-2.git defiant

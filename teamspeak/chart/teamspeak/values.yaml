@@ -7,11 +7,12 @@ podAnnotations: {}
 
 service:
   type: NodePort
-  nodePort: 30987
+  voicePort: 30987
+  filePort: 30033
 
 resources:
   limits:
-    cpu: 250m
+    cpu: 500m
     memory: 512Mi
   requests:
     cpu: 100m

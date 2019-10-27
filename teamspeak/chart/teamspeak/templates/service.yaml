@@ -15,6 +15,11 @@ spec:
       protocol: UDP
       name: teamspeak-voice
       port: 9987
+    - nodePort: {{ .Values.service.filePort }}
+      targetPort: 30033
+      protocol: TCP
+      name: teamspeak-file
+      port: 30033
   selector:
     app: teamspeak
     release: {{ .Release.Name }}

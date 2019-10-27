@@ -46,5 +46,3 @@ spec:
         ports:
           - containerPort: 80
             protocol: TCP
-        resources:
-{{ toYaml .Values.resources | indent 12 }}

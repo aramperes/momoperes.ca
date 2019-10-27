@@ -40,8 +40,6 @@ spec:
         ports:
           - containerPort: 28015
             protocol: TCP
-        resources:
-{{ toYaml .Values.resources | indent 12 }}
         volumeMounts:
           - mountPath: /data
             name: rethinkdb-data

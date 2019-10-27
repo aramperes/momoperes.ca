@@ -46,8 +46,6 @@ spec:
         ports:
           - containerPort: 9987
             protocol: UDP
-        resources:
-{{ toYaml .Values.resources | indent 12 }}
         env:
           - name: TS3SERVER_LICENSE
             value: accept

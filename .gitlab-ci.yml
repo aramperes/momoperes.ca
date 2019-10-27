@@ -96,10 +96,9 @@ teamspeak:deploy:
 
 defiant:build:
   stage: build
-  image:
-    name: alpine/git
-    entrypoint: ["/bin/sh"]
+  image: debian
   script:
+    - apt-get update && apt-get install -y git
     - cd ${DEFIANT_SRC}/src
     - git clone https://github.com/momothereal/code-jam-2.git defiant
     - cp main_config.yaml defiant/config/main_config.yaml

@@ -1,0 +1,26 @@
+image:
+  repository: registry.gitlab.com/momothereal/momoperes.ca/defiant
+  tag: latest
+  pullPolicy: Always
+
+podAnnotations: {}
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 256Mi
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+persistence:
+  enabled: true
+  accessMode: ReadWriteOnce
+  annotations:
+    "helm.sh/resource-policy": keep
+  storageClass: do-block-storage
+  storageSize: 1Gi

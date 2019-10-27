@@ -1,0 +1,26 @@
+web:
+  # Flask (web) configuration
+  ip: "0.0.0.0"
+  port: 80
+
+database:
+  # RethinkDB configuration
+  ip: "rethinkdb.public"
+  port: 28015
+  database_name: "battle_myth_theater"
+
+admin:
+  username: "admin"                        #Insecure, change from example credentials.
+  password: "admin"                        #Insecure, change from example credentials.
+
+game:
+  max_stat_points: 20
+
+debug: true
+
+stories:
+  # Path to FFMPEG executable
+  ffmpeg: "/usr/bin/ffmpeg"
+  # Max story count per user.
+  # Note: this is ignored when 'debug' is set to true
+  max_story_count: 10

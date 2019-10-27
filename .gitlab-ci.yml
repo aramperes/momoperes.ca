@@ -102,6 +102,9 @@ defiant:build:
     - cd ${DEFIANT_SRC}/src
     - git clone https://github.com/momothereal/code-jam-2.git defiant
     - cp main_config.yaml defiant/config/main_config.yaml
+  artifacts:
+    paths:
+      - ${DEFIANT_SRC}/src
   only:
     changes:
       - defiant/**/*

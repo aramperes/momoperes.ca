@@ -121,3 +121,21 @@ defiant:release:
   only:
     changes:
       - defiant/**/*
+
+defiant:deploy:
+  stage: deploy
+  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${DEFIANT_SRC}/chart
+    - mkdir -p manifests/
+    - helm template ./defiant/ --output-dir manifests/ --name defiant -f ./defiant/values.yaml
+    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+  only:
+    refs:
+      - master
+    changes:
+      - defiant/**/*

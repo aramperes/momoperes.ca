@@ -5,7 +5,7 @@ web:
 
 database:
   # RethinkDB configuration
-  ip: "rethinkdb.public"
+  ip: "rethinkdb-defiant.public"
   port: 28015
   database_name: "battle_myth_theater"
 

@@ -110,6 +110,7 @@ defiant:release:
   stage: release
   image:
     name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
   script:
     - echo "Building to ${DEFIANT_IMAGE}:${CI_COMMIT_TAG}"
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json

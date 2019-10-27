@@ -94,16 +94,22 @@ teamspeak:deploy:
 
 # DEFIANT #
 
-defiant:release:
-  stage: release
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
+defiant:build:
+  stage: build
+  image: alpine/git
   script:
     - cd ${DEFIANT_SRC}/src
     - git clone https://github.com/momothereal/code-jam-2.git defiant
     - cp main_config.yaml defiant/config/main_config.yaml
+  only:
+    changes:
+      - defiant/**/*
 
+defiant:release:
+  stage: release
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+  script:
     - echo "Building to ${DEFIANT_IMAGE}:${CI_COMMIT_TAG}"
     - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
     - /kaniko/executor --context ${DEFIANT_SRC}/src/defiant --dockerfile ${DEFIANT_SRC}/src/defiant/Dockerfile --destination ${DEFIANT_IMAGE}:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} --destination ${DEFIANT_IMAGE}:${CI_COMMIT_REF_SLUG}

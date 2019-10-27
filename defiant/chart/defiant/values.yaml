@@ -1,5 +1,5 @@
 image:
-  repository: registry.gitlab.com/momothereal/momoperes.ca/defiant
+  name: registry.gitlab.com/momothereal/momoperes.ca/defiant
   tag: latest
   pullPolicy: Always
 

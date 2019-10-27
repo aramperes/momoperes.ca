@@ -133,7 +133,7 @@ defiant:deploy:
     - cd ${DEFIANT_SRC}/chart
     - mkdir -p manifests/
     - helm template ./defiant/ --output-dir manifests/ --name defiant -f ./defiant/values.yaml
-    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+    - kubectl apply --namespace ${DEPLOY_NAMESPACE} --set image.name=${DEFIANT_IMAGE} --set image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -R -f manifests/
   only:
     refs:
       - master

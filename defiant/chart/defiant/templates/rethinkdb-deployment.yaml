@@ -3,12 +3,18 @@ kind: Deployment
 metadata:
   name: rethinkdb-{{ .Release.Name }}
   labels:
-    app: rethinkdb
+    app: defiant
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: rethinkdb
+      chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+      release: {{ .Release.Name }}
+      heritage: {{ .Release.Service }}
   template:
     metadata:
     {{- if .Values.podAnnotations }}

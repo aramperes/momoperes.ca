@@ -5,6 +5,6 @@ metadata:
   namespace: public
 spec:
   type: ExternalName
-  externalName: files.private.svc.cluster.local
+  externalName: website-files.private.svc.cluster.local
   ports:
   - port: 9000

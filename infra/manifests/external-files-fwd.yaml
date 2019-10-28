@@ -1,0 +1,10 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: files-private-fwd
+  namespace: public
+spec:
+  type: ExternalName
+  externalName: files.private.svc.cluster.local
+  ports:
+  - port: 9000

@@ -16,16 +16,16 @@ spec:
         paths:
           - path: /
             backend:
-              serviceName: website.public
+              serviceName: website
               servicePort: 9000
           - path: /files
             backend:
-              serviceName: files.private
+              serviceName: files-private-fwd
               servicePort: 9000 
     - host: defiant.momoperes.ca
       http:
         paths:
           - path: /
             backend:
-              serviceName: defiant.public
+              serviceName: defiant
               servicePort: 80

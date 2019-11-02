@@ -20,7 +20,7 @@ spec:
               servicePort: 9000
           - path: /files
             backend:
-              serviceName: files-private-fwd
+              serviceName: website-files
               servicePort: 9000 
     - host: defiant.momoperes.ca
       http:

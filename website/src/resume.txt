@@ -1,7 +1,47 @@
 
-+--------------------------+
-|        ARAM PERES        |
-+--------------------------+
-| Full-stack web developer |
-+--------------------------+
+       +--------------------------------------------------------------+
+       |                          ARAM PERES                          |
+       +--------------------------------------------------------------+
+       | Full-Stack Web Developer                                     |
+       | PDF: https://momoperes.ca/files/unlisted/Unlisted_Resume.pdf |
+       | ---                                                          |
+       | Email: contact@aramperes.ca                                  |
+       | GitHub: github.com/momothereal                               |
+       | LinkedIn: linkedin.com/in/aram-peres/                        |
+       | Website: aramperes.ca                                        |
+       | Location: Ottawa, Canada                                     |
+       +--------------------------------------------------------------+
 
++----------------------------------------------------------------------------+
+| Education                                                                  |
+| ---------                                                                  |
+|                                                                            |
+| * University of Ottawa • Sept 2019 - Present                               |
+|   Part-time BSc with Honours in Computer Science.                          |
+|                                                                            |
+| * Vanier College • Aug 2017 - Sept 2018                                    |
+|   Post-secondary studies in Computer Science and Mathematics.              |
+|                                                                            |
+| * College Sainte-Anne • 2012 - 2017                                        |
+|   DefiMonde program (Leadership and International Cooperation).            |
+|   Spanish and Mandarin classes, project and leadership courses.            |
++----------------------------------------------------------------------------+
+| Work Experience                                                            |
+| ---------------                                                            |
+|                                                                            |
+| * Government of Canada • Sept 2018 - Present                               |
+|   Lead the design and development of various classified full-stack         |
+|   applications and data-processing solutions. Full-time internship.        |
+|                                                                            |
+| * Vanier College • Aug 2017 - Sept 2018                                    |
+|   Post-secondary studies in Computer Science and Mathematics.              |
+|                                                                            |
+| * Part-Time SW Developer at Opal-RT Technologies, Inc. • June - Dec 2017   |
+|   Developed a prototype for the next generation of the HYPERSIM simulation |
+|   software using Electron, React, Java (JavaFX, Rhino, JNI), C++, and      |
+|   Python.                                                                  |
++----------------------------------------------------------------------------+
+
+---
+
+$  curl -Ls aramperes.ca | less

@@ -41,7 +41,7 @@ website:deploy:
 
     # Deploy using helm chart
     - cd ${WEBSITE_SRC}
-    - helm upgrade --install --force --set image.name=${WEBSITE_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} website ./chart/website
+    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${WEBSITE_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} website ./chart/website
   only:
     refs:
       - master
@@ -128,10 +128,8 @@ defiant:deploy:
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
 
     # Deploy using helm chart
-    - cd ${DEFIANT_SRC}/chart
-    - mkdir -p manifests/
-    - helm template ./defiant/ --output-dir manifests/ --name defiant --set image.name=${DEFIANT_IMAGE} --set image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -f ./defiant/values.yaml
-    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+    - cd ${DEFIANT_SRC}
+    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${DEFIANT_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} defiant ./chart/defiant
   only:
     refs:
       - master

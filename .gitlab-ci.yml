@@ -40,10 +40,8 @@ website:deploy:
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
 
     # Deploy using helm chart
-    - cd ${WEBSITE_SRC}/chart
-    - mkdir -p manifests/
-    - helm template ./website/ --output-dir manifests/ --name website --set image.name=${WEBSITE_IMAGE} --set image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} -f ./website/values.yaml
-    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+    - cd ${WEBSITE_SRC}
+    - helm upgrade --install --force --set image.name=${WEBSITE_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} website ./chart/website
   only:
     refs:
       - master

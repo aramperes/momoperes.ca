@@ -9,6 +9,7 @@ spec:
     - hosts:
         - momoperes.ca
         - defiant.momoperes.ca
+        - stream.momoperes.ca
       secretName: momoperes.ca-wildcard-tls
   rules:
     - host: momoperes.ca
@@ -29,3 +30,10 @@ spec:
             backend:
               serviceName: defiant
               servicePort: 80
+    - host: stream.momoperes.ca
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: media-server-radarr
+              servicePort: 7878

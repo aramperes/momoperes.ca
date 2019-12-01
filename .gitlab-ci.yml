@@ -3,6 +3,7 @@ variables:
   INFRA_SRC: ${CI_PROJECT_DIR}/infra
   TEAMSPEAK_SRC: ${CI_PROJECT_DIR}/teamspeak
   DEFIANT_SRC: ${CI_PROJECT_DIR}/defiant
+  CHARTMUSEUM_SRC: ${CI_PROJECT_DIR}/defiant
 
   IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
   WEBSITE_IMAGE: ${IMAGE_PREFIX}/website
@@ -129,9 +130,29 @@ defiant:deploy:
 
     # Deploy using helm chart
     - cd ${DEFIANT_SRC}
+    - helm init --client-only && helm repo update
     - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${DEFIANT_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} defiant ./chart/defiant
   only:
     refs:
       - master
     changes:
       - defiant/**/*
+
+# CHART MUSEUM #
+
+chartmuseum:deploy:
+  stage: deploy
+  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${CHARTMUSEUM_SRC}
+    - helm init --client-only && helm repo update
+    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} -f values.yaml chartmuseum stable/chartmuseum
+  only:
+    refs:
+      - master
+    changes:
+      - chartmuseum/**/*

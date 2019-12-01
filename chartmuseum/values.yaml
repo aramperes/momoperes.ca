@@ -1,4 +1,6 @@
 env:
+  open:
+    AUTH_ANONYMOUS_GET: true
   existingSecret: chartmuseum-credentials
   existingSecretMappings:
     BASIC_AUTH_USER: username

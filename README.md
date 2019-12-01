@@ -16,3 +16,6 @@ All the services in this repository are deployed to a Kubernetes cluster using H
 ## Hosted services
 
 * TeamSpeak server (`teamspeak`)
+
+* Helm Chart repository (`chartmuseum`)
+  * Hosted at `https://charts.momoperes.ca`

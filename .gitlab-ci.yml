@@ -3,7 +3,7 @@ variables:
   INFRA_SRC: ${CI_PROJECT_DIR}/infra
   TEAMSPEAK_SRC: ${CI_PROJECT_DIR}/teamspeak
   DEFIANT_SRC: ${CI_PROJECT_DIR}/defiant
-  CHARTMUSEUM_SRC: ${CI_PROJECT_DIR}/defiant
+  CHARTMUSEUM_SRC: ${CI_PROJECT_DIR}/chartmuseum
 
   IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
   WEBSITE_IMAGE: ${IMAGE_PREFIX}/website

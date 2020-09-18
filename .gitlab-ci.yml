@@ -94,50 +94,50 @@ teamspeak:deploy:
 
 # DEFIANT #
 
-defiant:build:
-  stage: build
-  image: debian
-  script:
-    - apt-get update && apt-get install -y git
-    - cd ${DEFIANT_SRC}/src
-    - git clone https://github.com/momothereal/code-jam-2.git defiant
-    - cp main_config.yaml defiant/config/main_config.yaml
-  artifacts:
-    paths:
-      - ${DEFIANT_SRC}/src
-  only:
-    changes:
-      - defiant/**/*
+#defiant:build:
+#  stage: build
+#  image: debian
+#  script:
+#    - apt-get update && apt-get install -y git
+#    - cd ${DEFIANT_SRC}/src
+#    - git clone https://github.com/momothereal/code-jam-2.git defiant
+#    - cp main_config.yaml defiant/config/main_config.yaml
+#  artifacts:
+#    paths:
+#      - ${DEFIANT_SRC}/src
+#  only:
+#    changes:
+#      - defiant/**/*
 
-defiant:release:
-  stage: release
-  image:
-    name: gcr.io/kaniko-project/executor:debug
-    entrypoint: [""]
-  script:
-    - echo "Building to ${DEFIANT_IMAGE}:${CI_COMMIT_TAG}"
-    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
-    - /kaniko/executor --context ${DEFIANT_SRC}/src/defiant --dockerfile ${DEFIANT_SRC}/src/defiant/Dockerfile --destination ${DEFIANT_IMAGE}:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} --destination ${DEFIANT_IMAGE}:${CI_COMMIT_REF_SLUG}
-  only:
-    changes:
-      - defiant/**/*
+#defiant:release:
+#  stage: release
+#  image:
+#    name: gcr.io/kaniko-project/executor:debug
+#    entrypoint: [""]
+#  script:
+#    - echo "Building to ${DEFIANT_IMAGE}:${CI_COMMIT_TAG}"
+#    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
+#    - /kaniko/executor --context ${DEFIANT_SRC}/src/defiant --dockerfile ${DEFIANT_SRC}/src/defiant/Dockerfile --destination ${DEFIANT_IMAGE}:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} --destination ${DEFIANT_IMAGE}:${CI_COMMIT_REF_SLUG}
+#  only:
+#    changes:
+#      - defiant/**/*
 
-defiant:deploy:
-  stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
-  script:
-    - mkdir -p ${KUBECONFIG_PARENT}
-    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
-
-    # Deploy using helm chart
-    - cd ${DEFIANT_SRC}
-    - helm init --client-only && helm repo update
-    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${DEFIANT_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} defiant ./chart/defiant
-  only:
-    refs:
-      - master
-    changes:
-      - defiant/**/*
+#defiant:deploy:
+#  stage: deploy
+#  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+#  script:
+#    - mkdir -p ${KUBECONFIG_PARENT}
+#    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+#
+#    # Deploy using helm chart
+#    - cd ${DEFIANT_SRC}
+#    - helm init --client-only && helm repo update
+#    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${DEFIANT_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} defiant ./chart/defiant
+#  only:
+#    refs:
+#      - master
+#    changes:
+#      - defiant/**/*
 
 # CHART MUSEUM #
 

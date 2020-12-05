@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 add-apt-repository -y ppa:deluge-team/stable
 apt-get update

@@ -75,7 +75,7 @@ abitibi:deploy:
 
     # Deploy using helm chart
     - cd ${ABITIBI_SRC}
-    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${ABITIBI_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} website ./chart/abitibi
+    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${ABITIBI_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} abitibi ./chart/abitibi
   only:
     refs:
       - master

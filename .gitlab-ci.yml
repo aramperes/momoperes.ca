@@ -4,10 +4,12 @@ variables:
   TEAMSPEAK_SRC: ${CI_PROJECT_DIR}/teamspeak
   DEFIANT_SRC: ${CI_PROJECT_DIR}/defiant
   CHARTMUSEUM_SRC: ${CI_PROJECT_DIR}/chartmuseum
+  ABITIBI_SRC: ${CI_PROJECT_DIR}/abitibi
 
   IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
   WEBSITE_IMAGE: ${IMAGE_PREFIX}/website
   DEFIANT_IMAGE: ${IMAGE_PREFIX}/defiant
+  ABITIBI_IMAGE: ${IMAGE_PREFIX}/abitibi
 
   KUBECONFIG_PARENT: /etc/deploy
   KUBECONFIG: ${KUBECONFIG_PARENT}/config
@@ -48,6 +50,37 @@ website:deploy:
       - master
     changes:
       - website/**/*
+
+### ABITIBI ###
+
+abitibi:release:
+  stage: release
+  image:
+    name: gcr.io/kaniko-project/executor:debug
+    entrypoint: [""]
+  script:
+    - echo "Building to ${ABITIBI_IMAGE}:${CI_COMMIT_TAG}"
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"username\":\"${CI_REGISTRY_USER}\",\"password\":\"${CI_REGISTRY_PASSWORD}\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor --context ${ABITIBI_SRC} --dockerfile ${ABITIBI_SRC}/docker/Dockerfile --destination ${ABITIBI_IMAGE}:${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} --destination ${ABITIBI_IMAGE}:${CI_COMMIT_REF_SLUG}
+  only:
+    changes:
+      - abitibi/**/*
+
+abitibi:deploy:
+  stage: deploy
+  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${ABITIBI_SRC}
+    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${ABITIBI_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} website ./chart/abitibi
+  only:
+    refs:
+      - master
+    changes:
+      - abitibi/**/*
 
 # INFRA #
 

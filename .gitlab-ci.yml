@@ -37,7 +37,7 @@ website:release:
 
 website:deploy:
   stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  image: wavyfm/helm-kubectl-docker:v1.15.5-v2.17.0
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -68,7 +68,7 @@ abitibi:release:
 
 abitibi:deploy:
   stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  image: wavyfm/helm-kubectl-docker:v1.15.5-v2.17.0
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -86,7 +86,7 @@ abitibi:deploy:
 
 infra:deploy:
   stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  image: wavyfm/helm-kubectl-docker:v1.15.5-v2.17.0
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -109,7 +109,7 @@ infra:deploy:
 
 teamspeak:deploy:
   stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  image: wavyfm/helm-kubectl-docker:v1.15.5-v2.17.0
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -157,7 +157,7 @@ teamspeak:deploy:
 
 #defiant:deploy:
 #  stage: deploy
-#  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+#  image: wavyfm/helm-kubectl-docker:v1.15.5-v2.17.0
 #  script:
 #    - mkdir -p ${KUBECONFIG_PARENT}
 #    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -176,7 +176,7 @@ teamspeak:deploy:
 
 chartmuseum:deploy:
   stage: deploy
-  image: lwolf/helm-kubectl-docker:v1.15.4-v2.14.3
+  image: wavyfm/helm-kubectl-docker:v1.15.5-v2.17.0
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}

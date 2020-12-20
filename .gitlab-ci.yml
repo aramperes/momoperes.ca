@@ -182,7 +182,7 @@ chartmuseum:deploy:
     # Deploy using helm chart
     - cd ${CHARTMUSEUM_SRC}
     - helm repo add chartmuseum https://chartmuseum.github.io/charts && helm repo update
-    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} -f values.yaml chartmuseum/chartmuseum
+    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} -f values.yaml chartmuseum chartmuseum/chartmuseum
   only:
     refs:
       - master

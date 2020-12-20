@@ -44,7 +44,7 @@ website:deploy:
 
     # Deploy using helm chart
     - cd ${WEBSITE_SRC}
-    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${WEBSITE_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} website ./chart/website
+    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} --set image.name=${WEBSITE_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} website ./chart/website
   only:
     refs:
       - master
@@ -75,7 +75,7 @@ abitibi:deploy:
 
     # Deploy using helm chart
     - cd ${ABITIBI_SRC}
-    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} --set image.name=${ABITIBI_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} abitibi ./chart/abitibi
+    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} --set image.name=${ABITIBI_IMAGE},image.tag=${CI_COMMIT_REF_SLUG}-${CI_COMMIT_SHORT_SHA} abitibi ./chart/abitibi
   only:
     refs:
       - master
@@ -117,7 +117,7 @@ teamspeak:deploy:
     # Deploy using helm chart
     - cd ${TEAMSPEAK_SRC}/chart
     - mkdir -p manifests/
-    - helm template ./teamspeak/ --output-dir manifests/ --name teamspeak -f ./teamspeak/values.yaml
+    - helm template teamspeak ./teamspeak/ --output-dir manifests/ -f ./teamspeak/values.yaml
     - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
   only:
     refs:
@@ -184,7 +184,7 @@ chartmuseum:deploy:
     # Deploy using helm chart
     - cd ${CHARTMUSEUM_SRC}
     - helm init --client-only && helm repo update
-    - helm upgrade --install --force --namespace ${DEPLOY_NAMESPACE} -f values.yaml chartmuseum stable/chartmuseum
+    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} -f values.yaml chartmuseum stable/chartmuseum
   only:
     refs:
       - master

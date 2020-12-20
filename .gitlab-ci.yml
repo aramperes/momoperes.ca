@@ -116,7 +116,7 @@ teamspeak:deploy:
 
     # Deploy using helm chart
     - cd ${TEAMSPEAK_SRC}
-    - helm upgrade --install teamspeak ./chart/teamspeak
+    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} teamspeak ./chart/teamspeak
   only:
     refs:
       - master

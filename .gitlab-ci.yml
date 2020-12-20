@@ -115,10 +115,8 @@ teamspeak:deploy:
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
 
     # Deploy using helm chart
-    - cd ${TEAMSPEAK_SRC}/chart
-    - mkdir -p manifests/
-    - helm template teamspeak ./teamspeak/ --output-dir manifests/ -f ./teamspeak/values.yaml
-    - kubectl apply --namespace ${DEPLOY_NAMESPACE} -R -f manifests/
+    - cd ${TEAMSPEAK_SRC}
+    - helm upgrade --install teamspeak ./chart/teamspeak
   only:
     refs:
       - master
@@ -183,8 +181,8 @@ chartmuseum:deploy:
 
     # Deploy using helm chart
     - cd ${CHARTMUSEUM_SRC}
-    - helm init --client-only && helm repo update
-    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} -f values.yaml chartmuseum stable/chartmuseum
+    - helm repo add chartmuseum https://chartmuseum.github.io/charts && helm repo update
+    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} -f values.yaml chartmuseum/chartmuseum
   only:
     refs:
       - master

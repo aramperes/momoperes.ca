@@ -37,7 +37,7 @@ website:release:
 
 website:deploy:
   stage: deploy
-  image: wavyfm/helm-kubectl-docker:v1.18.8-v3.4.2
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -68,7 +68,7 @@ abitibi:release:
 
 abitibi:deploy:
   stage: deploy
-  image: wavyfm/helm-kubectl-docker:v1.18.8-v3.4.2
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -86,7 +86,7 @@ abitibi:deploy:
 
 infra:deploy:
   stage: deploy
-  image: wavyfm/helm-kubectl-docker:v1.18.8-v3.4.2
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -109,7 +109,7 @@ infra:deploy:
 
 teamspeak:deploy:
   stage: deploy
-  image: wavyfm/helm-kubectl-docker:v1.18.8-v3.4.2
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
@@ -174,7 +174,7 @@ teamspeak:deploy:
 
 chartmuseum:deploy:
   stage: deploy
-  image: wavyfm/helm-kubectl-docker:v1.18.8-v3.4.2
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
   script:
     - mkdir -p ${KUBECONFIG_PARENT}
     - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}

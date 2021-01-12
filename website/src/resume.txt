@@ -30,7 +30,7 @@
 | Work Experience                                                            |
 | ---------------                                                            |
 |                                                                            |
-| * Wavy Labs Inc. • Sep 2018 - Present                                      |
+| * Wavy Labs Inc. • Apr 2018 - Present                                      |
 |   Co-founder, president and CTO. As the technical leader at Wavy Labs,     |
 |   I created wavy.fm and scaled it to thousands of users. I've also         |
 |   managed and lead consulting contracts for web development and design.    |

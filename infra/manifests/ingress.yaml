@@ -17,7 +17,7 @@ spec:
     - hosts:
         - poire.dev
       secretName: poire.dev-wildcard-tls
-     - hosts:
+    - hosts:
         - aramperes.ca
       secretName: aramperes.ca-wildcard-tls
   rules:

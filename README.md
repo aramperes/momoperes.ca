@@ -6,12 +6,12 @@ All the services in this repository are deployed to a Kubernetes cluster using H
 ## Projects
 
 * Personal website (`website`)
-  * URL: https://momoperes.ca
+  * URL: https://momoperes.ca / https://aramperes.ca / https://poire.dev
   * Source code: https://gitlab.com/momothereal/momoperes.ca/tree/master/website/src
 
-* PythonDiscord Code Jam #2 submission (`defiant`)
-  * URL: https://defiant.momoperes.ca
-  * Source code: https://github.com/momothereal/code-jam-2
+* Abitibi Temiscamingue Esports (`abitibi`)
+  * URL: https://abitibitemiscamingueesports.club/
+  * Source code: https://gitlab.com/momothereal/momoperes.ca/-/tree/master/abitibi/src
 
 ## Hosted services
 

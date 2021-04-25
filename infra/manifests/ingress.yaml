@@ -17,6 +17,9 @@ spec:
     - hosts:
         - poire.dev
       secretName: poire.dev-wildcard-tls
+     - hosts:
+        - aramperes.ca
+      secretName: aramperes.ca-wildcard-tls
   rules:
     - host: momoperes.ca
       http:
@@ -51,6 +54,17 @@ spec:
               serviceName: abitibi
               servicePort: 9000
     - host: poire.dev
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: website
+              servicePort: 9000
+          - path: /files
+            backend:
+              serviceName: website-files
+              servicePort: 9000
+    - host: aramperes.ca
       http:
         paths:
           - path: /

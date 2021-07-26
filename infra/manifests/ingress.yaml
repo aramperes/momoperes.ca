@@ -16,7 +16,6 @@ spec:
       secretName: abitibi-wildcard-tls
     - hosts:
         - poire.dev
-        - ntc-pdf-converter.poire.dev
       secretName: poire.dev-wildcard-tls
     - hosts:
         - aramperes.ca

@@ -20,8 +20,6 @@ spec:
     - hosts:
         - aramperes.ca
       secretName: aramperes.ca-wildcard-tls
-    - hosts:
-        - notetaking.club
   rules:
     - host: momoperes.ca
       http:
@@ -77,10 +75,3 @@ spec:
             backend:
               serviceName: website-files
               servicePort: 9000
-    - host: notetaking.club
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: ntc-comingsoon
-              servicePort: 7001

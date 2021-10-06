@@ -4,7 +4,7 @@ metadata:
   name: ntc-comingsoon
   namespace: public
 spec:
-  externalName: 10.137.248.204
+  externalName: 159.203.15.179
   ports:
   - name: http
     port: 7001

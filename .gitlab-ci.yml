@@ -92,7 +92,7 @@ onetun-ntc-comingsoon:deploy:
 
     # Deploy using helm chart
     - cd ${ONETUN_SRC}
-    - hper upgrade --install -n ${DEPLOY_NAMESPACE} -f ./ntc-comingsoon.yml ntc-comingsoon ./chart/onetun
+    - helm upgrade --install -n ${DEPLOY_NAMESPACE} -f ./ntc-comingsoon.yml ntc-comingsoon ./chart/onetun
   only:
     refs:
       - master
@@ -108,7 +108,7 @@ onetun-ntc-pdf-converter:deploy:
 
     # Deploy using helm chart
     - cd ${ONETUN_SRC}
-    - hper upgrade --install -n ${DEPLOY_NAMESPACE} -f ./ntc-pdf-converter.yml ntc-pdf-converter ./chart/onetun
+    - helm upgrade --install -n ${DEPLOY_NAMESPACE} -f ./ntc-pdf-converter.yml ntc-pdf-converter ./chart/onetun
   only:
     refs:
       - master

@@ -1,0 +1,79 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "onetun.fullname" . }}
+  labels:
+    {{- include "onetun.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "onetun.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "onetun.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "onetun.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: tcp
+              containerPort: 2115
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: ONETUN_LOG
+              value: {{ .Values.onetun.log | quote }}
+            - name: ONETUN_PRIVATE_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: private-key
+                  name: {{ .Values.onetun.secretName | quote }}
+            - name: ONETUN_ENDPOINT_PUBLIC_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: public-key
+                  name: {{ .Values.onetun.secretName | quote }}
+            - name: ONETUN_ENDPOINT_ADDR
+              valueFrom:
+                secretKeyRef:
+                  key: endpoint
+                  name: {{ .Values.onetun.secretName | quote }}
+            - name: ONETUN_SOURCE_PEER_IP
+              value: {{ .Values.onetun.sourcePeerIP | quote }}
+            - name: ONETUN_KEEP_ALIVE
+              value: {{ .Values.onetun.keepAlive | quote }}
+            - name: ONETUN_DESTINATION_ADDR
+              value: {{ .Values.onetun.destination | quote }}
+            - name: ONETUN_SOURCE_ADDR
+              value: "0.0.0.0:2115"
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

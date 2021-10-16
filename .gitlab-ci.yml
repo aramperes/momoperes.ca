@@ -5,6 +5,7 @@ variables:
   DEFIANT_SRC: ${CI_PROJECT_DIR}/defiant
   CHARTMUSEUM_SRC: ${CI_PROJECT_DIR}/chartmuseum
   ABITIBI_SRC: ${CI_PROJECT_DIR}/abitibi
+  ONETUN_SRC: ${CI_PROJECT_DIR}/onetun
 
   IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
   WEBSITE_IMAGE: ${IMAGE_PREFIX}/website
@@ -81,6 +82,38 @@ abitibi:deploy:
       - master
     changes:
       - abitibi/**/*
+
+onetun-ntc-comingsoon:deploy:
+  stage: deploy
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${ONETUN_SRC}
+    - hper upgrade --install -n ${DEPLOY_NAMESPACE} -f ./ntc-comingsoon.yml ntc-comingsoon ./chart/onetun
+  only:
+    refs:
+      - master
+    changes:
+      - onetun/**/*
+
+onetun-ntc-pdf-converter:deploy:
+  stage: deploy
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${ONETUN_SRC}
+    - hper upgrade --install -n ${DEPLOY_NAMESPACE} -f ./ntc-pdf-converter.yml ntc-pdf-converter ./chart/onetun
+  only:
+    refs:
+      - master
+    changes:
+      - onetun/**/*
 
 # INFRA #
 

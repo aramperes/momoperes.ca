@@ -1,0 +1,21 @@
+onetun:
+  secretName: onetun-ntc-pdf-converter
+  keepAlive: 10
+  sourcePeerIP: 192.168.4.18
+  destination: 192.168.4.2:7000
+  log: trace
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: 50m
+  hosts:
+    - host: ntc-pdf-converter.poire.dev
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: poire.dev-wildcard-tls
+      hosts:
+        - ntc-pdf-converter.poire.dev

@@ -61,10 +61,8 @@ spec:
               value: {{ .Values.onetun.sourcePeerIP | quote }}
             - name: ONETUN_KEEP_ALIVE
               value: {{ .Values.onetun.keepAlive | quote }}
-            - name: ONETUN_DESTINATION_ADDR
-              value: {{ .Values.onetun.destination | quote }}
-            - name: ONETUN_SOURCE_ADDR
-              value: "0.0.0.0:2115"
+            - name: ONETUN_PORT_FORWARD_1
+              value: "0.0.0.0:2115:{{ .Values.onetun.destination }}"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

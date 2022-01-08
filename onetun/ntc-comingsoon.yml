@@ -3,7 +3,7 @@ onetun:
   keepAlive: 10
   sourcePeerIP: 192.168.4.17
   destination: 192.168.4.2:7001
-  log: trace
+  log: info
 
 ingress:
   enabled: true

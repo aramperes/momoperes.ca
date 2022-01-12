@@ -10,10 +10,8 @@ spec:
         - momoperes.ca
         - defiant.momoperes.ca
         - charts.momoperes.ca
+        - abitibi.momoperes.ca
       secretName: momoperes.ca-wildcard-tls
-    - hosts:
-        - abitibitemiscamingueesports.club
-      secretName: abitibi-wildcard-tls
     - hosts:
         - poire.dev
       secretName: poire.dev-wildcard-tls
@@ -46,7 +44,7 @@ spec:
             backend:
               serviceName: chartmuseum
               servicePort: 8080
-    - host: abitibitemiscamingueesports.club
+    - host: abitibi.momoperes.ca
       http:
         paths:
           - path: /

@@ -14,6 +14,7 @@ spec:
       secretName: momoperes.ca-wildcard-tls
     - hosts:
         - poire.dev
+        - trace.poire.dev
       secretName: poire.dev-wildcard-tls
     - hosts:
         - aramperes.ca

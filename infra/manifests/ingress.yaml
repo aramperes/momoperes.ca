@@ -63,6 +63,13 @@ spec:
             backend:
               serviceName: website-files
               servicePort: 9000
+    - host: trace.poire.dev
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: uptrace
+              servicePort: 14318
     - host: aramperes.ca
       http:
         paths:

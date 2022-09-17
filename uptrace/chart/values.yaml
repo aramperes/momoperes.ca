@@ -1,0 +1,302 @@
+# Default values for uptrace.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: uptrace/uptrace-dev
+  pullPolicy: Always
+  tag: latest
+
+clickhouse:
+  imagePullSecrets: []
+  image:
+    repository: clickhouse/clickhouse-server
+    pullPolicy: IfNotPresent
+    tag: "22.7"
+
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+uptrace:
+  config:
+    ##
+    ## A list of pre-configured projects. Each project is fully isolated.
+    ##
+    projects:
+      # Conventionally, the first project is used to monitor Uptrace itself.
+      - id: 1
+        name: Uptrace
+        # Token grants write access to the project. Keep a secret.
+        token: project1_secret_token
+        pinned_attrs:
+          - service.name
+          - host.name
+          - deployment.environment
+
+      # Other projects can be used to monitor your applications.
+      # To monitor micro-services or multiple related services, use a single project.
+      - id: 2
+        name: My project
+        token: project2_secret_token
+        pinned_attrs:
+          - service.name
+          - host.name
+          - deployment.environment
+
+    ##
+    ## To require authentication, uncomment the following section.
+    ##
+    # users:
+    #   - username: uptrace
+    #     password: uptrace
+    #   - username: admin
+    #     password: admin
+
+    ##
+    ## You can also specify auth providers, instead of username+password login.
+    ##
+    # user_providers:
+    #   # Cloudflare user provider: uses Cloudflare Zero Trust Access (Identity)
+    #   # See https://developers.cloudflare.com/cloudflare-one/identity/ for more info.
+    #   cloudflare:
+    #     # The base URL of the Cloudflare Zero Trust team.
+    #     team_url: https://myteam.cloudflareaccess.com
+    #     # The Application Audience (AUD) Tag for this application.
+    #     # You can retrieve this from the Cloudflare Zero Trust 'Access' Dashboard.
+    #     audience: bea6df23b944e4a0cd178609ba1bb64dc98dfe1f66ae7b918e563f6cf28b37e0
+
+    ##
+    ## ClickHouse database credentials.
+    ##
+    ch:
+      # Connection string for ClickHouse database. For example:
+      # clickhouse://<user>:<password>@<host>:<port>/<database>?sslmode=disable
+      #
+      # See https://clickhouse.uptrace.dev/guide/golang-clickhouse.html#options
+      dsn: 'clickhouse://default:@clickhouse-uptrace:9000/uptrace?sslmode=disable'
+
+    ##
+    ## Alerting rules for monitoring metrics.
+    ##
+    ## See https://uptrace.dev/get/alerting.html for details.
+    ##
+    alerting:
+      rules:
+        - name: Network errors
+          metrics:
+            - system.network.errors as $net_errors
+          query:
+            - $net_errors > 0 group by host.name
+          # for the last 5 minutes
+          for: 5m
+          # in the project id=1
+          projects: [1]
+
+        - name: Filesystem usage >= 90%
+          metrics:
+            - system.filesystem.usage as $fs_usage
+          query:
+            - group by host.name
+            - group by device
+            - where device !~ "loop"
+            - $fs_usage{state="used"} / $fs_usage >= 0.9
+          for: 5m
+          projects: [1]
+
+        - name: Uptrace is dropping spans
+          metrics:
+            - uptrace.projects.spans as $spans
+          query:
+            - $spans{type=dropped} > 0
+          for: 1m
+          projects: [1]
+
+        - name: Always firing (for fun and testing)
+          metrics:
+            - process.runtime.go.goroutines as $goroutines
+          query:
+            - $goroutines >= 0 group by host.name
+          for: 1m
+          projects: [1]
+
+      # Create alerts from error logs and span events.
+      create_alerts_from_spans:
+        enabled: true
+        labels:
+          alert_kind: error
+
+    ##
+    ## AlertManager client configuration.
+    ## See https://uptrace.dev/get/alerting.html for details.
+    ##
+    ## Note that this is NOT an AlertManager config and you need to configure AlertManager separately.
+    ## See https://prometheus.io/docs/alerting/latest/configuration/ for details.
+    ##
+    alertmanager_client:
+      # AlertManager API endpoints that Uptrace uses to manage alerts.
+      urls:
+        - 'http://localhost:9093/api/v2/alerts'
+
+    ##
+    ## Various options to tweak ClickHouse schema.
+    ## For changes to take effect, you need reset the ClickHouse database with `ch reset`.
+    ##
+    ch_schema:
+      # Compression codec, for example, LZ4, ZSTD(3), or Default.
+      compression: ZSTD(3)
+
+      # Whether to use ReplicatedMergeTree instead of MergeTree.
+      replicated: false
+
+      # Cluster name for Distributed tables and ON CLUSTER clause.
+      #cluster: uptrace1
+
+      spans:
+        storage_policy: 'default'
+        # Delete spans data after 30 days.
+        ttl_delete: 30 DAY
+
+      metrics:
+        storage_policy: 'default'
+        # Delete metrics data after 90 days.
+        ttl_delete: 90 DAY
+
+    ##
+    ## Addresses on which Uptrace receives gRPC and HTTP requests.
+    ##
+    listen:
+      # OTLP/gRPC API.
+      grpc:
+        addr: ':14317'
+        # tls:
+        #   cert_file: config/tls/uptrace.crt
+        #   key_file: config/tls/uptrace.key
+
+      # OTLP/HTTP API and Uptrace API with UI.
+      http:
+        addr: ':14318'
+        # tls:
+        #   cert_file: config/tls/uptrace.crt
+        #   key_file: config/tls/uptrace.key
+
+    ##
+    ## Various options for Uptrace UI.
+    ##
+    site:
+      # Overrides public URL for Vue-powered UI in case you put Uptrace behind a proxy.
+      #addr: 'https://uptrace.mydomain.com'
+
+    ##
+    ## Spans processing options.
+    ##
+    spans:
+      # The size of the Go chan used to buffer incoming spans.
+      # If the buffer is full, Uptrace starts to drop spans.
+      #buffer_size: 100000
+
+      # The number of spans to insert in a single query.
+      #batch_size: 10000
+
+    ##
+    ## Metrics processing options.
+    ##
+    metrics:
+      # List of attributes to drop for being noisy.
+      drop_attrs:
+        - telemetry.sdk.language
+        - telemetry.sdk.name
+        - telemetry.sdk.version
+
+      # The size of the Go chan used to buffer incoming measures.
+      # If the buffer is full, Uptrace starts to drop measures.
+      #buffer_size: 100000
+
+      # The number of measures to insert in a single query.
+      #batch_size: 10000
+
+    ##
+    ## SQLite database that is used to store metadata such us metric names, dashboards, alerts,
+    ## and so on.
+    ##
+    db:
+      # SQLite connection string.
+      #
+      # Uptrace automatically creates SQLite database file in the current working directory.
+      # Make sure the directory is writable by Uptrace process.
+      dsn: 'file:${UPTRACE_DB_FILE:uptrace.sqlite3}?_foreign_keys=1&_busy_timeout=1000'
+
+    # Secret key that is used to sign JWT tokens etc.
+    secret_key: ${UPTRACE_SECRET_KEY}
+
+    # Enable to log HTTP requests and database queries.
+    debug: false

@@ -1,0 +1,6 @@
+uptrace:
+  config:
+    user_providers:
+      cloudflare:
+        team_url: https://wavy.cloudflareaccess.com
+        audience: 75940e2248f7135b7e3a6f9bf44bac3c1c7cae8539f98c4c7df6c08f37d92d33

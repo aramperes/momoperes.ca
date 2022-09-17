@@ -14,7 +14,6 @@ spec:
       secretName: momoperes.ca-wildcard-tls
     - hosts:
         - poire.dev
-        - trace.poire.dev
       secretName: poire.dev-wildcard-tls
     - hosts:
         - aramperes.ca
@@ -63,13 +62,6 @@ spec:
             backend:
               serviceName: website-files
               servicePort: 9000
-    - host: trace.poire.dev
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: uptrace
-              servicePort: 14318
     - host: aramperes.ca
       http:
         paths:

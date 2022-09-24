@@ -83,22 +83,6 @@ abitibi:deploy:
     changes:
       - abitibi/**/*
 
-onetun-ntc-comingsoon:deploy:
-  stage: deploy
-  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
-  script:
-    - mkdir -p ${KUBECONFIG_PARENT}
-    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
-
-    # Deploy using helm chart
-    - cd ${ONETUN_SRC}
-    - helm upgrade --install -n ${DEPLOY_NAMESPACE} -f ./ntc-comingsoon.yml ntc-comingsoon ./chart/onetun
-  only:
-    refs:
-      - master
-    changes:
-      - onetun/**/*
-
 onetun-ntc-pdf-converter:deploy:
   stage: deploy
   image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2

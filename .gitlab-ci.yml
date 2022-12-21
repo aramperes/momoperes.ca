@@ -6,6 +6,7 @@ variables:
   CHARTMUSEUM_SRC: ${CI_PROJECT_DIR}/chartmuseum
   ABITIBI_SRC: ${CI_PROJECT_DIR}/abitibi
   ONETUN_SRC: ${CI_PROJECT_DIR}/onetun
+  TWITTON_SRC: ${CI_PROJECT_DIR}/twitton
 
   IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
   WEBSITE_IMAGE: ${IMAGE_PREFIX}/website
@@ -98,6 +99,22 @@ onetun-ntc-pdf-converter:deploy:
       - master
     changes:
       - onetun/**/*
+
+twitton:deploy:
+  stage: deploy
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${TWITTON_SRC}
+    - helm upgrade --install -n ${DEPLOY_NAMESPACE} -f ./values.yaml twitton ./chart/twitton
+  only:
+    refs:
+      - master
+    changes:
+      - twitton/**/*
 
 # INFRA #
 

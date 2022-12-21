@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "twitton.fullname" . }}
+  labels:
+    {{- include "twitton.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "twitton.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "twitton.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "twitton.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s" .Chart.AppVersion) }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: RUST_LOG
+              value: info
+            - name: WEB_DOMAIN
+              value: {{ .Values.twitton.webDomain | required "must configure webDomain" }}
+            - name: LOCAL_DOMAIN
+              value: {{ .Values.twitton.localDomain | required "must configure localDomain" }}
+            - name: ADMIN_USERNAME
+              value: {{ .Values.twitton.adminUsername | required "must configure adminUsername" }}
+            - name: ADMIN_PUBLIC_KEY_PEM
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.twitton.adminKeySecretName | required "must configure adminKeySecretName" }}
+                  key: public.pem
+            - name: ADMIN_PRIVATE_KEY_PEM
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.twitton.adminKeySecretName | required "must configure adminKeySecretName" }}
+                  key: private.pem
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

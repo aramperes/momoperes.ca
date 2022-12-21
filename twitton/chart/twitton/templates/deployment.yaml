@@ -56,6 +56,10 @@ spec:
               value: {{ .Values.twitton.localDomain | required "must configure localDomain" }}
             - name: ADMIN_USERNAME
               value: {{ .Values.twitton.adminUsername | required "must configure adminUsername" }}
+            {{- if .Values.twitton.adminIconUrl }}
+            - name: ADMIN_ICON_URL
+              value: {{ .Values.twitton.adminIconUrl }}
+            {{- end }}
             - name: ADMIN_PUBLIC_KEY_PEM
               valueFrom:
                 secretKeyRef:

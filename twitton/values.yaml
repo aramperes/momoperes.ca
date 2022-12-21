@@ -1,3 +1,7 @@
+image:
+  tag: latest
+  pullPolicy: Always
+
 ingress:
   enabled: true
   annotations:
@@ -18,3 +22,4 @@ twitton:
   localDomain: twitton.poire.dev
   adminUsername: aram
   adminKeySecretName: twitton-admin-keys
+  adminIconUrl: https://i.imgur.com/DyflGFV.png

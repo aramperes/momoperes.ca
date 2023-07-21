@@ -11,11 +11,10 @@ metadata:
 spec:
   type: ClusterIP
   ports:
-    - nodePort: {{ .Values.service.queryPort }}
-      targetPort: 10011
+    - targetPort: 10011
       protocol: TCP
       name: teamspeak-query
-      port: 10011
+      port: {{ .Values.service.queryPort }}
   selector:
     app: teamspeak
     release: {{ .Release.Name }}

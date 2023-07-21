@@ -1,0 +1,22 @@
+{{- if .Values.service.queryPort }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-query
+  labels:
+    app: teamspeak
+    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: ClusterIP
+  ports:
+    - nodePort: {{ .Values.service.queryPort }}
+      targetPort: 10011
+      protocol: TCP
+      name: teamspeak-query
+      port: 10011
+  selector:
+    app: teamspeak
+    release: {{ .Release.Name }}
+{{- end }}

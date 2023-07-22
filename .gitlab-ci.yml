@@ -7,6 +7,7 @@ variables:
   ABITIBI_SRC: ${CI_PROJECT_DIR}/abitibi
   ONETUN_SRC: ${CI_PROJECT_DIR}/onetun
   TWITTON_SRC: ${CI_PROJECT_DIR}/twitton
+  TSACTIVITY_SRC: ${CI_PROJECT_DIR}/ts-activity
 
   IMAGE_PREFIX: registry.gitlab.com/momothereal/momoperes.ca
   WEBSITE_IMAGE: ${IMAGE_PREFIX}/website
@@ -156,6 +157,26 @@ teamspeak:deploy:
       - master
     changes:
       - teamspeak/**/*
+
+# TS-ACTIVITY #
+
+ts-activity:deploy:
+  stage: deploy
+  image: wavyfm/helm-kubectl-docker:v1.19.3-v3.4.2
+  script:
+    - mkdir -p ${KUBECONFIG_PARENT}
+    - echo ${K8S_CLUSTER_CONFIG} | base64 -d > ${KUBECONFIG}
+
+    # Deploy using helm chart
+    - cd ${TSACTIVITY_SRC}
+    - helm repo add momoperes https://charts.momoperes.ca
+    - helm repo update
+    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} -f values-dev.yaml ts-activity momoperes/ts-activity
+  only:
+    refs:
+      - master
+    changes:
+      - ts-activity/**/*
 
 # DEFIANT #
 

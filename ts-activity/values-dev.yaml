@@ -1,0 +1,8 @@
+config:
+  discordUsername: "Jeff"
+  serverQueryAddr: "teamspeak-query:10011"
+  serverQuerySecret: "ts-activity"
+  webhookSecret: "ts-activity"
+
+nameOverride: "ts-activity"
+fullnameOverride: "ts-activity"

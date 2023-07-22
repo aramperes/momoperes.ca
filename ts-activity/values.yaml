@@ -1,6 +1,8 @@
 config:
-  discordUsername: "Jeff"
+  discordUsername: "TimSpeak"
+  discordAvatar: "https://i.imgur.com/JQMDe2M.png"
   serverQueryAddr: "teamspeak-query:10011"
+  serverQueryId: 1
   serverQuerySecret: "ts-activity"
   webhookSecret: "ts-activity"
 

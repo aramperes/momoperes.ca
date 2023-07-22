@@ -171,7 +171,7 @@ ts-activity:deploy:
     - cd ${TSACTIVITY_SRC}
     - helm repo add momoperes https://charts.momoperes.ca
     - helm repo update
-    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} -f values-dev.yaml ts-activity momoperes/ts-activity
+    - helm upgrade --install --namespace ${DEPLOY_NAMESPACE} -f values.yaml ts-activity momoperes/ts-activity
   only:
     refs:
       - master
